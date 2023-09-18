@@ -1,12 +1,23 @@
-import { useDispatch } from "react-redux"
-import { addToCart } from "../Redux/user/userAction"
+import { useDispatch, useSelector } from "react-redux"
+import { addToCart, incrementProduct } from "../Redux/user/userAction"
+import { reduceQuantityFromAdmin } from "../Redux/admin/adminAction"
+import Swal from "sweetalert2"
 
-const ProductItem = ({product}) => {
+const ProductItem = ({ product }) => {
+  const products = useSelector((state)=>state.user)
   const dispatch = useDispatch()
-  const {id,name,category,img_url,price,quantity} = product
-  const handleAddCart = ()=>{
+  
+  const { id, name, category, img_url, price, quantity } = product
+  const handleAddCart = (id) => {
+    const isExist = products.find((item)=>item.id === id)
+    if(isExist){
+      Swal.fire('Already added !!')
+      return
+    }
 
     dispatch(addToCart(product))
+    dispatch(incrementProduct(id))
+    dispatch(reduceQuantityFromAdmin(id))
   }
   return (
     <div className="lws-productCard">
@@ -22,7 +33,9 @@ const ProductItem = ({product}) => {
             QTY <span className="lws-quantity">{quantity}</span>
           </p>
         </div>
-        <button onClick={()=>handleAddCart()}  className="lws-btnAddToCart">Add To Cart</button>
+        <button onClick={() => handleAddCart(id)} className="lws-btnAddToCart">
+          Add To Cart
+        </button>
       </div>
     </div>
   )

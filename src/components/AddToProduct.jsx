@@ -12,8 +12,8 @@ const AddToProduct = () => {
     const name = from.name.value
     const category = from.category.value
     const img_url = from.image_url.value
-    const price = from.price.value
-    const quantity = from.quantity.value
+    const price = parseInt(from.price.value)
+    const quantity = parseInt(from.quantity.value)
 
     const cartProductDetails = {
       id: new Date().getTime().toString(36),
